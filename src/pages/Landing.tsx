@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { GraduationCap, Briefcase, Users, TrendingUp, BookOpen } from "lucide-react";
-import mitAdtLogo from "@/assets/mit-adt-logo.png";
+import mitLogo from "@/assets/mit-university-logo.png";
 
 const Landing = () => {
   return (
@@ -10,7 +10,7 @@ const Landing = () => {
       <header className="border-b bg-card">
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
-            <img src={mitAdtLogo} alt="MIT ADT University" className="h-12" />
+            <img src={mitLogo} alt="MIT University" className="h-16" />
             <span className="text-2xl font-bold text-foreground">MIT ADT Internship Portal</span>
           </div>
           <nav className="flex gap-4">

@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
-import mitAdtLogo from "@/assets/mit-adt-logo.png";
+import mitLogo from "@/assets/mit-university-logo.png";
 
 const EditInternship = () => {
   const navigate = useNavigate();
@@ -113,7 +113,7 @@ const EditInternship = () => {
       <header className="border-b bg-card">
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
-            <img src={mitAdtLogo} alt="MIT ADT University" className="h-12" />
+            <img src={mitLogo} alt="MIT University" className="h-16" />
             <span className="text-xl font-bold text-foreground">MIT ADT Internship Portal</span>
           </div>
           <Button variant="ghost" onClick={() => navigate("/coordinator/dashboard")}>

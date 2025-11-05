@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Briefcase, LogOut, Users, FileText, Plus } from "lucide-react";
-import mitAdtLogo from "@/assets/mit-adt-logo.png";
+import mitLogo from "@/assets/mit-university-logo.png";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -187,7 +187,7 @@ const CoordinatorDashboard = () => {
       <header className="border-b bg-card">
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
-            <img src={mitAdtLogo} alt="MIT ADT University" className="h-12" />
+            <img src={mitLogo} alt="MIT University" className="h-16" />
             <span className="text-xl font-bold text-foreground">MIT ADT Internship Portal</span>
           </div>
           <Button variant="ghost" onClick={handleLogout}>
