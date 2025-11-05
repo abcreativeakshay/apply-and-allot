@@ -1,13 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { 
-  User, 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged 
-} from "firebase/auth";
-import { doc, setDoc, getDoc } from "firebase/firestore";
-import { auth, db } from "@/lib/firebase";
+
+interface User {
+  uid: string;
+  email: string;
+}
 
 interface AuthContextType {
   user: User | null;
@@ -22,68 +18,83 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export const useAuth = () => useContext(AuthContext);
 
+// Local storage keys
+const STORAGE_KEYS = {
+  CURRENT_USER: 'current_user',
+  USER_TYPE: 'user_type',
+  STUDENTS: 'students',
+  COORDINATORS: 'coordinators',
+};
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userType, setUserType] = useState<"student" | "coordinator" | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setUser(user);
-      if (user) {
-        // Get user type from Firestore
-        const studentDoc = await getDoc(doc(db, "students", user.uid));
-        if (studentDoc.exists()) {
-          setUserType("student");
-        } else {
-          const coordinatorDoc = await getDoc(doc(db, "coordinators", user.uid));
-          if (coordinatorDoc.exists()) {
-            setUserType("coordinator");
-          }
-        }
-      } else {
-        setUserType(null);
-      }
-      setLoading(false);
-    });
-
-    return unsubscribe;
+    // Load user from local storage on mount
+    const storedUser = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
+    const storedUserType = localStorage.getItem(STORAGE_KEYS.USER_TYPE);
+    
+    if (storedUser && storedUserType) {
+      setUser(JSON.parse(storedUser));
+      setUserType(storedUserType as "student" | "coordinator");
+    }
+    setLoading(false);
   }, []);
 
   const signUp = async (email: string, password: string, userData: any, type: "student" | "coordinator") => {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
+    const storageKey = type === "student" ? STORAGE_KEYS.STUDENTS : STORAGE_KEYS.COORDINATORS;
+    const users = JSON.parse(localStorage.getItem(storageKey) || '[]');
     
-    // Store user data in Firestore
-    const collection = type === "student" ? "students" : "coordinators";
-    await setDoc(doc(db, collection, user.uid), {
-      ...userData,
+    // Check if user already exists
+    if (users.some((u: any) => u.email === email)) {
+      throw new Error('User with this email already exists');
+    }
+    
+    // Create new user
+    const newUser = {
+      uid: Math.random().toString(36).substr(2, 9),
       email,
+      password, // In production, this should be hashed
+      ...userData,
       createdAt: new Date().toISOString(),
-    });
+    };
     
+    users.push(newUser);
+    localStorage.setItem(storageKey, JSON.stringify(users));
+    
+    // Set current user
+    const currentUser = { uid: newUser.uid, email: newUser.email };
+    setUser(currentUser);
     setUserType(type);
+    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(currentUser));
+    localStorage.setItem(STORAGE_KEYS.USER_TYPE, type);
   };
 
   const signIn = async (email: string, password: string, type: "student" | "coordinator") => {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
+    const storageKey = type === "student" ? STORAGE_KEYS.STUDENTS : STORAGE_KEYS.COORDINATORS;
+    const users = JSON.parse(localStorage.getItem(storageKey) || '[]');
     
-    // Verify user type
-    const collection = type === "student" ? "students" : "coordinators";
-    const userDoc = await getDoc(doc(db, collection, user.uid));
+    const foundUser = users.find((u: any) => u.email === email && u.password === password);
     
-    if (!userDoc.exists()) {
-      await signOut(auth);
-      throw new Error(`No ${type} account found with this email`);
+    if (!foundUser) {
+      throw new Error(`Invalid email or password. Please check your credentials or register as a ${type} first.`);
     }
     
+    // Set current user
+    const currentUser = { uid: foundUser.uid, email: foundUser.email };
+    setUser(currentUser);
     setUserType(type);
+    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(currentUser));
+    localStorage.setItem(STORAGE_KEYS.USER_TYPE, type);
   };
 
   const logout = async () => {
-    await signOut(auth);
+    setUser(null);
     setUserType(null);
+    localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
+    localStorage.removeItem(STORAGE_KEYS.USER_TYPE);
   };
 
   const value = {

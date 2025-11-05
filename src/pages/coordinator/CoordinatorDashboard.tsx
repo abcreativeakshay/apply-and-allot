@@ -11,8 +11,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
-import { collection, query, getDocs, addDoc, where } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 
 const CoordinatorDashboard = () => {
   const navigate = useNavigate();
@@ -43,29 +41,17 @@ const CoordinatorDashboard = () => {
     if (!user) return;
     
     try {
-      // Load my internships
-      const internshipsQuery = query(
-        collection(db, "internships"),
-        where("coordinatorId", "==", user.uid)
-      );
-      const internshipsSnap = await getDocs(internshipsQuery);
-      const internshipsList = internshipsSnap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setMyInternships(internshipsList);
+      // Load my internships from local storage
+      const storedInternships = JSON.parse(localStorage.getItem('internships') || '[]');
+      const myInternshipsList = storedInternships.filter((i: any) => i.coordinatorId === user.uid);
+      setMyInternships(myInternshipsList);
 
       // Load all applications for my internships
-      const applicationsQuery = query(collection(db, "applications"));
-      const applicationsSnap = await getDocs(applicationsQuery);
-      const allApplications = applicationsSnap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as any[];
+      const storedApplications = JSON.parse(localStorage.getItem('applications') || '[]');
       
       // Filter pending applications for my internships
-      const myInternshipIds = internshipsList.map(i => i.id);
-      const pending = allApplications.filter(
+      const myInternshipIds = myInternshipsList.map((i: any) => i.id);
+      const pending = storedApplications.filter(
         (app: any) => myInternshipIds.includes(app.internshipId) && app.status === "pending"
       );
       setPendingApplications(pending);
@@ -92,6 +78,7 @@ const CoordinatorDashboard = () => {
 
     try {
       const internshipData = {
+        id: Math.random().toString(36).substr(2, 9),
         ...newInternship,
         coordinatorId: user.uid,
         positions: parseInt(newInternship.positions),
@@ -99,7 +86,9 @@ const CoordinatorDashboard = () => {
         createdAt: new Date().toISOString(),
       };
 
-      await addDoc(collection(db, "internships"), internshipData);
+      const storedInternships = JSON.parse(localStorage.getItem('internships') || '[]');
+      storedInternships.push(internshipData);
+      localStorage.setItem('internships', JSON.stringify(storedInternships));
       
       toast({
         title: "Internship Created",
@@ -122,7 +111,7 @@ const CoordinatorDashboard = () => {
       console.error("Error creating internship:", error);
       toast({
         title: "Error",
-        description: "Failed to create internship. Check Firebase setup and security rules.",
+        description: "Failed to create internship.",
         variant: "destructive",
       });
     }
@@ -133,6 +122,7 @@ const CoordinatorDashboard = () => {
 
     const sampleInternships = [
       {
+        id: Math.random().toString(36).substr(2, 9),
         title: "Software Engineer Intern",
         company: "Google",
         department: "CSE",
@@ -144,6 +134,7 @@ const CoordinatorDashboard = () => {
         createdAt: new Date().toISOString(),
       },
       {
+        id: Math.random().toString(36).substr(2, 9),
         title: "Data Analyst Intern",
         company: "Microsoft",
         department: "CSE",
@@ -155,6 +146,7 @@ const CoordinatorDashboard = () => {
         createdAt: new Date().toISOString(),
       },
       {
+        id: Math.random().toString(36).substr(2, 9),
         title: "Hardware Engineer Intern",
         company: "Intel",
         department: "ECE",
@@ -168,9 +160,9 @@ const CoordinatorDashboard = () => {
     ];
 
     try {
-      for (const internship of sampleInternships) {
-        await addDoc(collection(db, "internships"), internship);
-      }
+      const storedInternships = JSON.parse(localStorage.getItem('internships') || '[]');
+      storedInternships.push(...sampleInternships);
+      localStorage.setItem('internships', JSON.stringify(storedInternships));
 
       toast({
         title: "Sample Data Added",
@@ -182,7 +174,7 @@ const CoordinatorDashboard = () => {
       console.error("Error adding sample data:", error);
       toast({
         title: "Error",
-        description: "Failed to add sample data. Please check Firebase setup.",
+        description: "Failed to add sample data.",
         variant: "destructive",
       });
     }

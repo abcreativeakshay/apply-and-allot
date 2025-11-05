@@ -7,8 +7,6 @@ import { Input } from "@/components/ui/input";
 import { GraduationCap, Briefcase, Search, LogOut, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
-import { collection, query, getDocs, addDoc, where } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
@@ -31,26 +29,14 @@ const StudentDashboard = () => {
     if (!user) return;
     
     try {
-      // Load internships
-      const internshipsQuery = query(collection(db, "internships"));
-      const internshipsSnap = await getDocs(internshipsQuery);
-      const internshipsList = internshipsSnap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setInternships(internshipsList);
+      // Load internships from local storage
+      const storedInternships = JSON.parse(localStorage.getItem('internships') || '[]');
+      setInternships(storedInternships);
 
-      // Load my applications
-      const applicationsQuery = query(
-        collection(db, "applications"),
-        where("studentId", "==", user.uid)
-      );
-      const applicationsSnap = await getDocs(applicationsQuery);
-      const applicationsList = applicationsSnap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setMyApplications(applicationsList);
+      // Load my applications from local storage
+      const storedApplications = JSON.parse(localStorage.getItem('applications') || '[]');
+      const myApps = storedApplications.filter((app: any) => app.studentId === user.uid);
+      setMyApplications(myApps);
     } catch (error) {
       console.error("Error loading data:", error);
       toast({
@@ -86,8 +72,9 @@ const StudentDashboard = () => {
     }
 
     try {
-      // Add new application to Firestore
+      // Add new application to local storage
       const applicationData = {
+        id: Math.random().toString(36).substr(2, 9),
         studentId: user.uid,
         internshipId: internship.id,
         title: internship.title,
@@ -96,7 +83,9 @@ const StudentDashboard = () => {
         appliedOn: new Date().toISOString(),
       };
 
-      await addDoc(collection(db, "applications"), applicationData);
+      const storedApplications = JSON.parse(localStorage.getItem('applications') || '[]');
+      storedApplications.push(applicationData);
+      localStorage.setItem('applications', JSON.stringify(storedApplications));
       
       // Update local state
       setMyApplications([...myApplications, applicationData]);

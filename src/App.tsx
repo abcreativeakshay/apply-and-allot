@@ -7,7 +7,6 @@ import { AuthProvider } from "@/hooks/useAuth";
 import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";
 import DSAInfo from "./pages/DSAInfo";
-import FirebaseSetup from "./pages/FirebaseSetup";
 import StudentLogin from "./pages/student/StudentLogin";
 import StudentRegister from "./pages/student/StudentRegister";
 import StudentDashboard from "./pages/student/StudentDashboard";
@@ -27,7 +26,6 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/dsa-info" element={<DSAInfo />} />
-          <Route path="/firebase-setup" element={<FirebaseSetup />} />
           <Route path="/student/login" element={<StudentLogin />} />
           <Route path="/student/register" element={<StudentRegister />} />
           <Route path="/student/dashboard" element={<StudentDashboard />} />
