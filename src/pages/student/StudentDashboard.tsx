@@ -141,8 +141,19 @@ const StudentDashboard = () => {
         {/* My Applications */}
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle>My Applications</CardTitle>
-            <CardDescription>Track your application status</CardDescription>
+            <div className="flex items-start justify-between">
+              <div>
+                <CardTitle>My Applications</CardTitle>
+                <CardDescription>Track your application status</CardDescription>
+              </div>
+              <Badge variant="outline" className="text-xs">
+                DSA: Stack (LIFO)
+              </Badge>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              📚 Uses <strong>Stack data structure</strong> - Latest applications appear first (Last In First Out). 
+              Applications are stored in a stack for maintaining history.
+            </p>
           </CardHeader>
           <CardContent>
             {myApplications.length === 0 ? (
@@ -177,8 +188,19 @@ const StudentDashboard = () => {
         {/* Browse Internships */}
         <Card>
           <CardHeader>
-            <CardTitle>Browse Internships</CardTitle>
-            <CardDescription>Find and apply to internship opportunities</CardDescription>
+            <div className="flex items-start justify-between">
+              <div>
+                <CardTitle>Browse Internships</CardTitle>
+                <CardDescription>Find and apply to internship opportunities</CardDescription>
+              </div>
+              <Badge variant="outline" className="text-xs">
+                DSA: Hashing + Graph
+              </Badge>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              📚 Uses <strong>Hashing</strong> for O(1) lookup of internships by ID and <strong>Graph</strong> 
+              structure to map student-internship relationships and recommendations.
+            </p>
             <div className="mt-4 flex gap-2">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />

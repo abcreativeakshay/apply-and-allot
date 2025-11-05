@@ -32,6 +32,12 @@ const CoordinatorLogin = () => {
           </div>
           <CardTitle className="text-2xl">Coordinator Login</CardTitle>
           <CardDescription>Access your coordinator dashboard</CardDescription>
+          <div className="mt-3 rounded-md bg-muted p-3 text-xs">
+            <p className="font-semibold text-foreground">🔐 DSA: Hashing</p>
+            <p className="mt-1 text-muted-foreground">
+              Passwords are secured using <strong>hash functions</strong> for safe storage and authentication
+            </p>
+          </div>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">

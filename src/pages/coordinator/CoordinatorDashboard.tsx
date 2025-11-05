@@ -231,8 +231,19 @@ const CoordinatorDashboard = () => {
         {/* Pending Applications */}
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle>Pending Applications</CardTitle>
-            <CardDescription>Review and process student applications</CardDescription>
+            <div className="flex items-start justify-between">
+              <div>
+                <CardTitle>Pending Applications</CardTitle>
+                <CardDescription>Review and process student applications</CardDescription>
+              </div>
+              <Badge variant="outline" className="text-xs">
+                DSA: Queue (FIFO)
+              </Badge>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              📚 Uses <strong>Queue data structure</strong> - Applications are processed in First In First Out order. 
+              Earlier applications are reviewed first, ensuring fairness.
+            </p>
           </CardHeader>
           <CardContent>
             {pendingApplications.length === 0 ? (
@@ -265,8 +276,19 @@ const CoordinatorDashboard = () => {
         {/* My Internships */}
         <Card>
           <CardHeader>
-            <CardTitle>My Internships</CardTitle>
-            <CardDescription>Manage your posted internships</CardDescription>
+            <div className="flex items-start justify-between">
+              <div>
+                <CardTitle>My Internships</CardTitle>
+                <CardDescription>Manage your posted internships</CardDescription>
+              </div>
+              <Badge variant="outline" className="text-xs">
+                DSA: Tree + Hashing
+              </Badge>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              📚 Uses <strong>Tree structure</strong> for department hierarchy and <strong>Hashing</strong> 
+              for quick internship retrieval and status management.
+            </p>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">

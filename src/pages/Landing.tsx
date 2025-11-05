@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { GraduationCap, Briefcase, Users, TrendingUp } from "lucide-react";
+import { GraduationCap, Briefcase, Users, TrendingUp, BookOpen } from "lucide-react";
 
 const Landing = () => {
   return (
@@ -13,6 +13,12 @@ const Landing = () => {
             <span className="text-2xl font-bold text-foreground">InternConnect</span>
           </div>
           <nav className="flex gap-4">
+            <Button variant="ghost" asChild>
+              <Link to="/dsa-info">
+                <BookOpen className="mr-2 h-4 w-4" />
+                DSA Guide
+              </Link>
+            </Button>
             <Button variant="ghost" asChild>
               <Link to="/student/login">Student Login</Link>
             </Button>
