@@ -5,9 +5,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { GraduationCap, Briefcase, Search, LogOut, FileText } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const StudentDashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const { toast } = useToast();
+  const [myApplications, setMyApplications] = useState([
+    {
+      id: 1,
+      title: "Software Development Intern",
+      company: "Tech Corp",
+      status: "pending",
+      appliedOn: "2024-11-01",
+    },
+  ]);
 
   // Mock data
   const internships = [
@@ -37,15 +48,37 @@ const StudentDashboard = () => {
     },
   ];
 
-  const myApplications = [
-    {
-      id: 1,
-      title: "Software Development Intern",
-      company: "Tech Corp",
+  const handleApply = (internship: typeof internships[0]) => {
+    // Check if already applied
+    const alreadyApplied = myApplications.some(
+      (app) => app.title === internship.title && app.company === internship.company
+    );
+
+    if (alreadyApplied) {
+      toast({
+        title: "Already Applied",
+        description: "You have already applied to this internship",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Add new application
+    const newApplication = {
+      id: myApplications.length + 1,
+      title: internship.title,
+      company: internship.company,
       status: "pending",
-      appliedOn: "2024-11-01",
-    },
-  ];
+      appliedOn: new Date().toISOString().split("T")[0],
+    };
+
+    setMyApplications([...myApplications, newApplication]);
+
+    toast({
+      title: "Application Submitted",
+      description: `Your application for ${internship.title} has been submitted successfully!`,
+    });
+  };
 
   return (
     <div className="min-h-screen bg-muted">
@@ -173,7 +206,19 @@ const StudentDashboard = () => {
                     <span>Positions: {internship.positions}</span>
                     <span>Deadline: {internship.deadline}</span>
                   </div>
-                  <Button size="sm">Apply Now</Button>
+                  <Button 
+                    size="sm" 
+                    onClick={() => handleApply(internship)}
+                    disabled={myApplications.some(
+                      (app) => app.title === internship.title && app.company === internship.company
+                    )}
+                  >
+                    {myApplications.some(
+                      (app) => app.title === internship.title && app.company === internship.company
+                    )
+                      ? "Applied"
+                      : "Apply Now"}
+                  </Button>
                 </div>
               ))}
             </div>
