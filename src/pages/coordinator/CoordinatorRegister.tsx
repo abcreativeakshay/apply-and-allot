@@ -44,11 +44,27 @@ const CoordinatorRegister = () => {
       });
       navigate("/coordinator/login");
     } catch (error: any) {
+      let errorMessage = "Failed to create account";
+      
+      if (error.code === "auth/email-already-in-use") {
+        errorMessage = "This email is already registered. Please login instead.";
+      } else if (error.code === "auth/invalid-email") {
+        errorMessage = "Invalid email address format.";
+      } else if (error.code === "auth/weak-password") {
+        errorMessage = "Password should be at least 6 characters long.";
+      } else if (error.code === "auth/operation-not-allowed") {
+        errorMessage = "Email/Password authentication is not enabled. Please enable it in Firebase Console → Authentication → Sign-in method → Email/Password.";
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       toast({
         title: "Registration Failed",
-        description: error.message || "Failed to create account",
+        description: errorMessage,
         variant: "destructive",
       });
+      
+      console.error("Registration error:", error);
     } finally {
       setLoading(false);
     }

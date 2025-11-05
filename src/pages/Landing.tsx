@@ -14,6 +14,11 @@ const Landing = () => {
           </div>
           <nav className="flex gap-4">
             <Button variant="ghost" asChild>
+              <Link to="/firebase-setup">
+                Setup Guide
+              </Link>
+            </Button>
+            <Button variant="ghost" asChild>
               <Link to="/dsa-info">
                 <BookOpen className="mr-2 h-4 w-4" />
                 DSA Guide
