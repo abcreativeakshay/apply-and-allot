@@ -28,9 +28,19 @@ const CoordinatorLogin = () => {
       });
       navigate("/coordinator/dashboard");
     } catch (error: any) {
+      let errorMessage = "Invalid email or password";
+      
+      if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
+        errorMessage = "Invalid email or password. Please check your credentials or register first.";
+      } else if (error.code === "auth/invalid-credential") {
+        errorMessage = "Invalid credentials. Please check your email and password or register first.";
+      } else if (error.message.includes("No coordinator account")) {
+        errorMessage = "No coordinator account found. Please register as a coordinator first.";
+      }
+      
       toast({
         title: "Login Failed",
-        description: error.message || "Invalid credentials",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -81,10 +91,10 @@ const CoordinatorLogin = () => {
               {loading ? "Logging in..." : "Login"}
             </Button>
           </form>
-          <div className="mt-4 text-center text-sm text-muted-foreground">
-            Don't have an account?{" "}
+          <div className="mt-4 rounded-md bg-muted p-3 text-center text-sm">
+            <p className="font-semibold text-foreground">Don't have an account?</p>
             <Link to="/coordinator/register" className="text-secondary hover:underline">
-              Register here
+              Register as a Coordinator →
             </Link>
           </div>
           <div className="mt-2 text-center">
