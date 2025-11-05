@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { GraduationCap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
+import mitLogo from "@/assets/mit-university-logo.png";
 
 const StudentRegister = () => {
   const navigate = useNavigate();
@@ -74,8 +75,8 @@ const StudentRegister = () => {
     <div className="flex min-h-screen items-center justify-center bg-muted p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary">
-            <GraduationCap className="h-8 w-8 text-primary-foreground" />
+          <div className="mx-auto mb-4">
+            <img src={mitLogo} alt="MIT University" className="h-20 mx-auto" />
           </div>
           <CardTitle className="text-2xl">Student Registration</CardTitle>
           <CardDescription>Create your account to get started</CardDescription>

@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Briefcase } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
+import mitLogo from "@/assets/mit-university-logo.png";
 
 const CoordinatorRegister = () => {
   const navigate = useNavigate();
@@ -74,8 +75,8 @@ const CoordinatorRegister = () => {
     <div className="flex min-h-screen items-center justify-center bg-muted p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-secondary">
-            <Briefcase className="h-8 w-8 text-secondary-foreground" />
+          <div className="mx-auto mb-4">
+            <img src={mitLogo} alt="MIT University" className="h-20 mx-auto" />
           </div>
           <CardTitle className="text-2xl">Coordinator Registration</CardTitle>
           <CardDescription>Create your coordinator account</CardDescription>
