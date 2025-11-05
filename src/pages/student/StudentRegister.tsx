@@ -7,10 +7,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { GraduationCap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 const StudentRegister = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { signUp } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -19,13 +22,36 @@ const StudentRegister = () => {
     password: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Registration Successful",
-      description: "You can now login with your credentials",
-    });
-    navigate("/student/login");
+    setLoading(true);
+    
+    try {
+      await signUp(
+        formData.email,
+        formData.password,
+        {
+          name: formData.name,
+          department: formData.department,
+          rollNumber: formData.rollNumber,
+        },
+        "student"
+      );
+      
+      toast({
+        title: "Registration Successful",
+        description: "You can now login with your credentials",
+      });
+      navigate("/student/login");
+    } catch (error: any) {
+      toast({
+        title: "Registration Failed",
+        description: error.message || "Failed to create account",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -99,8 +125,8 @@ const StudentRegister = () => {
                 required
               />
             </div>
-            <Button type="submit" className="w-full">
-              Register
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Creating Account..." : "Register"}
             </Button>
           </form>
           <div className="mt-4 text-center text-sm text-muted-foreground">

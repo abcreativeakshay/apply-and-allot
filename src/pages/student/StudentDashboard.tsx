@@ -1,57 +1,79 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { GraduationCap, Briefcase, Search, LogOut, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { collection, query, getDocs, addDoc, where } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 const StudentDashboard = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const { toast } = useToast();
-  const [myApplications, setMyApplications] = useState([
-    {
-      id: 1,
-      title: "Software Development Intern",
-      company: "Tech Corp",
-      status: "pending",
-      appliedOn: "2024-11-01",
-    },
-  ]);
+  const { user, logout } = useAuth();
+  const [myApplications, setMyApplications] = useState<any[]>([]);
+  const [internships, setInternships] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Mock data
-  const internships = [
-    {
-      id: 1,
-      title: "Software Development Intern",
-      company: "Tech Corp",
-      department: "CSE",
-      deadline: "2024-12-31",
-      positions: 5,
-    },
-    {
-      id: 2,
-      title: "Data Science Intern",
-      company: "AI Solutions",
-      department: "CSE",
-      deadline: "2024-12-25",
-      positions: 3,
-    },
-    {
-      id: 3,
-      title: "Hardware Design Intern",
-      company: "Circuit Innovations",
-      department: "ECE",
-      deadline: "2024-12-28",
-      positions: 4,
-    },
-  ];
+  useEffect(() => {
+    if (!user) {
+      navigate("/student/login");
+      return;
+    }
+    loadData();
+  }, [user, navigate]);
 
-  const handleApply = (internship: typeof internships[0]) => {
+  const loadData = async () => {
+    if (!user) return;
+    
+    try {
+      // Load internships
+      const internshipsQuery = query(collection(db, "internships"));
+      const internshipsSnap = await getDocs(internshipsQuery);
+      const internshipsList = internshipsSnap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setInternships(internshipsList);
+
+      // Load my applications
+      const applicationsQuery = query(
+        collection(db, "applications"),
+        where("studentId", "==", user.uid)
+      );
+      const applicationsSnap = await getDocs(applicationsQuery);
+      const applicationsList = applicationsSnap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setMyApplications(applicationsList);
+    } catch (error) {
+      console.error("Error loading data:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load data",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
+
+  const handleApply = async (internship: any) => {
+    if (!user) return;
+
     // Check if already applied
     const alreadyApplied = myApplications.some(
-      (app) => app.title === internship.title && app.company === internship.company
+      (app) => app.internshipId === internship.id
     );
 
     if (alreadyApplied) {
@@ -63,21 +85,34 @@ const StudentDashboard = () => {
       return;
     }
 
-    // Add new application
-    const newApplication = {
-      id: myApplications.length + 1,
-      title: internship.title,
-      company: internship.company,
-      status: "pending",
-      appliedOn: new Date().toISOString().split("T")[0],
-    };
+    try {
+      // Add new application to Firestore
+      const applicationData = {
+        studentId: user.uid,
+        internshipId: internship.id,
+        title: internship.title,
+        company: internship.company,
+        status: "pending",
+        appliedOn: new Date().toISOString(),
+      };
 
-    setMyApplications([...myApplications, newApplication]);
+      await addDoc(collection(db, "applications"), applicationData);
+      
+      // Update local state
+      setMyApplications([...myApplications, applicationData]);
 
-    toast({
-      title: "Application Submitted",
-      description: `Your application for ${internship.title} has been submitted successfully!`,
-    });
+      toast({
+        title: "Application Submitted",
+        description: `Your application for ${internship.title} has been submitted successfully!`,
+      });
+    } catch (error) {
+      console.error("Error applying:", error);
+      toast({
+        title: "Error",
+        description: "Failed to submit application",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -89,11 +124,9 @@ const StudentDashboard = () => {
             <GraduationCap className="h-8 w-8 text-primary" />
             <span className="text-xl font-bold text-foreground">Student Portal</span>
           </div>
-          <Button variant="ghost" asChild>
-            <Link to="/">
-              <LogOut className="mr-2 h-4 w-4" />
-              Logout
-            </Link>
+          <Button variant="ghost" onClick={handleLogout}>
+            <LogOut className="mr-2 h-4 w-4" />
+            Logout
           </Button>
         </div>
       </header>
@@ -156,16 +189,20 @@ const StudentDashboard = () => {
             </p>
           </CardHeader>
           <CardContent>
-            {myApplications.length === 0 ? (
+            {loading ? (
+              <p className="text-center text-muted-foreground">Loading...</p>
+            ) : myApplications.length === 0 ? (
               <p className="text-center text-muted-foreground">No applications yet</p>
             ) : (
               <div className="space-y-4">
-                {myApplications.map((app) => (
-                  <div key={app.id} className="flex items-center justify-between rounded-lg border p-4">
+                {myApplications.map((app, idx) => (
+                  <div key={idx} className="flex items-center justify-between rounded-lg border p-4">
                     <div>
                       <h3 className="font-semibold text-card-foreground">{app.title}</h3>
                       <p className="text-sm text-muted-foreground">{app.company}</p>
-                      <p className="text-xs text-muted-foreground">Applied on: {app.appliedOn}</p>
+                      <p className="text-xs text-muted-foreground">
+                        Applied on: {new Date(app.appliedOn).toLocaleDateString()}
+                      </p>
                     </div>
                     <Badge
                       variant={
@@ -176,7 +213,7 @@ const StudentDashboard = () => {
                             : "destructive"
                       }
                     >
-                      {app.status.toUpperCase()}
+                      {(app.status || "pending").toUpperCase()}
                     </Badge>
                   </div>
                 ))}
@@ -214,7 +251,12 @@ const StudentDashboard = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            {loading ? (
+              <p className="text-center text-muted-foreground">Loading internships...</p>
+            ) : internships.length === 0 ? (
+              <p className="text-center text-muted-foreground">No internships available</p>
+            ) : (
+              <div className="space-y-4">
               {internships.map((internship) => (
                 <div key={internship.id} className="rounded-lg border p-4">
                   <div className="mb-2 flex items-start justify-between">
@@ -232,11 +274,11 @@ const StudentDashboard = () => {
                     size="sm" 
                     onClick={() => handleApply(internship)}
                     disabled={myApplications.some(
-                      (app) => app.title === internship.title && app.company === internship.company
+                      (app) => app.internshipId === internship.id
                     )}
                   >
                     {myApplications.some(
-                      (app) => app.title === internship.title && app.company === internship.company
+                      (app) => app.internshipId === internship.id
                     )
                       ? "Applied"
                       : "Apply Now"}
@@ -244,6 +286,7 @@ const StudentDashboard = () => {
                 </div>
               ))}
             </div>
+            )}
           </CardContent>
         </Card>
       </div>

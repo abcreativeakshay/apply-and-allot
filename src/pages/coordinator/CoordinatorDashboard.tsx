@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,10 +10,18 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { collection, query, getDocs, addDoc, where } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 const CoordinatorDashboard = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, logout } = useAuth();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [myInternships, setMyInternships] = useState<any[]>([]);
+  const [pendingApplications, setPendingApplications] = useState<any[]>([]);
   const [newInternship, setNewInternship] = useState({
     title: "",
     company: "",
@@ -23,59 +31,101 @@ const CoordinatorDashboard = () => {
     description: "",
   });
 
-  const myInternships = [
-    {
-      id: 1,
-      title: "Software Development Intern",
-      company: "Tech Corp",
-      applications: 12,
-      positions: 5,
-      deadline: "2024-12-31",
-      status: "open",
-    },
-    {
-      id: 2,
-      title: "Data Science Intern",
-      company: "AI Solutions",
-      applications: 8,
-      positions: 3,
-      deadline: "2024-12-25",
-      status: "open",
-    },
-  ];
+  useEffect(() => {
+    if (!user) {
+      navigate("/coordinator/login");
+      return;
+    }
+    loadData();
+  }, [user, navigate]);
 
-  const pendingApplications = [
-    {
-      id: 1,
-      studentName: "Alice Johnson",
-      internshipTitle: "Software Development Intern",
-      appliedOn: "2024-11-01",
-      department: "CSE",
-    },
-    {
-      id: 2,
-      studentName: "Bob Smith",
-      internshipTitle: "Data Science Intern",
-      appliedOn: "2024-11-02",
-      department: "CSE",
-    },
-  ];
+  const loadData = async () => {
+    if (!user) return;
+    
+    try {
+      // Load my internships
+      const internshipsQuery = query(
+        collection(db, "internships"),
+        where("coordinatorId", "==", user.uid)
+      );
+      const internshipsSnap = await getDocs(internshipsQuery);
+      const internshipsList = internshipsSnap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setMyInternships(internshipsList);
 
-  const handleCreateInternship = (e: React.FormEvent) => {
+      // Load all applications for my internships
+      const applicationsQuery = query(collection(db, "applications"));
+      const applicationsSnap = await getDocs(applicationsQuery);
+      const allApplications = applicationsSnap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as any[];
+      
+      // Filter pending applications for my internships
+      const myInternshipIds = internshipsList.map(i => i.id);
+      const pending = allApplications.filter(
+        (app: any) => myInternshipIds.includes(app.internshipId) && app.status === "pending"
+      );
+      setPendingApplications(pending);
+    } catch (error) {
+      console.error("Error loading data:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load data",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
+
+  const handleCreateInternship = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Internship Created",
-      description: "Your internship posting is now live!",
-    });
-    setIsDialogOpen(false);
-    setNewInternship({
-      title: "",
-      company: "",
-      department: "",
-      positions: "",
-      deadline: "",
-      description: "",
-    });
+    if (!user) return;
+
+    try {
+      const internshipData = {
+        ...newInternship,
+        coordinatorId: user.uid,
+        positions: parseInt(newInternship.positions),
+        status: "open",
+        createdAt: new Date().toISOString(),
+      };
+
+      await addDoc(collection(db, "internships"), internshipData);
+      
+      toast({
+        title: "Internship Created",
+        description: "Your internship posting is now live!",
+      });
+      
+      setIsDialogOpen(false);
+      setNewInternship({
+        title: "",
+        company: "",
+        department: "",
+        positions: "",
+        deadline: "",
+        description: "",
+      });
+      
+      // Reload data
+      loadData();
+    } catch (error) {
+      console.error("Error creating internship:", error);
+      toast({
+        title: "Error",
+        description: "Failed to create internship",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -87,11 +137,9 @@ const CoordinatorDashboard = () => {
             <Briefcase className="h-8 w-8 text-secondary" />
             <span className="text-xl font-bold text-foreground">Coordinator Portal</span>
           </div>
-          <Button variant="ghost" asChild>
-            <Link to="/">
-              <LogOut className="mr-2 h-4 w-4" />
-              Logout
-            </Link>
+          <Button variant="ghost" onClick={handleLogout}>
+            <LogOut className="mr-2 h-4 w-4" />
+            Logout
           </Button>
         </div>
       </header>
@@ -213,7 +261,7 @@ const CoordinatorDashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {myInternships.reduce((sum, i) => sum + i.applications, 0)}
+                {myInternships.reduce((sum, i) => sum + (i.applications || 0), 0)}
               </div>
             </CardContent>
           </Card>
@@ -246,18 +294,22 @@ const CoordinatorDashboard = () => {
             </p>
           </CardHeader>
           <CardContent>
-            {pendingApplications.length === 0 ? (
+            {loading ? (
+              <p className="text-center text-muted-foreground">Loading...</p>
+            ) : pendingApplications.length === 0 ? (
               <p className="text-center text-muted-foreground">No pending applications</p>
             ) : (
               <div className="space-y-4">
                 {pendingApplications.map((app) => (
                   <div key={app.id} className="flex items-center justify-between rounded-lg border p-4">
                     <div>
-                      <h3 className="font-semibold text-card-foreground">{app.studentName}</h3>
-                      <p className="text-sm text-muted-foreground">{app.internshipTitle}</p>
+                      <h3 className="font-semibold text-card-foreground">{app.studentId}</h3>
+                      <p className="text-sm text-muted-foreground">{app.title}</p>
                       <div className="mt-1 flex gap-2">
-                        <Badge variant="outline">{app.department}</Badge>
-                        <span className="text-xs text-muted-foreground">Applied: {app.appliedOn}</span>
+                        <Badge variant="outline">{app.company}</Badge>
+                        <span className="text-xs text-muted-foreground">
+                          Applied: {new Date(app.appliedOn).toLocaleDateString()}
+                        </span>
                       </div>
                     </div>
                     <div className="flex gap-2">
@@ -291,7 +343,12 @@ const CoordinatorDashboard = () => {
             </p>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            {loading ? (
+              <p className="text-center text-muted-foreground">Loading...</p>
+            ) : myInternships.length === 0 ? (
+              <p className="text-center text-muted-foreground">No internships created yet</p>
+            ) : (
+              <div className="space-y-4">
               {myInternships.map((internship) => (
                 <div key={internship.id} className="rounded-lg border p-4">
                   <div className="mb-2 flex items-start justify-between">
@@ -304,7 +361,7 @@ const CoordinatorDashboard = () => {
                     </Badge>
                   </div>
                   <div className="mb-3 flex gap-4 text-sm text-muted-foreground">
-                    <span>Applications: {internship.applications}</span>
+                    <span>Applications: {internship.applications || 0}</span>
                     <span>Positions: {internship.positions}</span>
                     <span>Deadline: {internship.deadline}</span>
                   </div>
@@ -319,6 +376,7 @@ const CoordinatorDashboard = () => {
                 </div>
               ))}
             </div>
+            )}
           </CardContent>
         </Card>
       </div>
