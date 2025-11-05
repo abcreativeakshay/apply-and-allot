@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { GraduationCap, Briefcase, Search, LogOut, FileText } from "lucide-react";
+import mitAdtLogo from "@/assets/mit-adt-logo.png";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -109,9 +110,9 @@ const StudentDashboard = () => {
       {/* Header */}
       <header className="border-b bg-card">
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-2">
-            <GraduationCap className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold text-foreground">Student Portal</span>
+          <div className="flex items-center gap-3">
+            <img src={mitAdtLogo} alt="MIT ADT University" className="h-12" />
+            <span className="text-xl font-bold text-foreground">MIT ADT Internship Portal</span>
           </div>
           <Button variant="ghost" onClick={handleLogout}>
             <LogOut className="mr-2 h-4 w-4" />
@@ -173,8 +174,9 @@ const StudentDashboard = () => {
               </Badge>
             </div>
             <p className="mt-2 text-xs text-muted-foreground">
-              📚 Uses <strong>Stack data structure</strong> - Latest applications appear first (Last In First Out). 
-              Applications are stored in a stack for maintaining history.
+              📚 Uses <strong>Stack data structure (LIFO)</strong> - Time Complexity: O(1) for push/pop operations. 
+              Latest applications appear first (Last In First Out), making it easy to track recent activity. 
+              This helps students quickly see their most recent submissions.
             </p>
           </CardHeader>
           <CardContent>
@@ -224,8 +226,9 @@ const StudentDashboard = () => {
               </Badge>
             </div>
             <p className="mt-2 text-xs text-muted-foreground">
-              📚 Uses <strong>Hashing</strong> for O(1) lookup of internships by ID and <strong>Graph</strong> 
-              structure to map student-internship relationships and recommendations.
+              📚 Uses <strong>HashMap</strong> (O(1) average lookup) for instant internship retrieval by ID and <strong>Graph</strong> 
+              structure (O(V+E) for traversal) to map student-internship relationships. This enables efficient filtering, 
+              searching, and personalized recommendations.
             </p>
             <div className="mt-4 flex gap-2">
               <div className="relative flex-1">

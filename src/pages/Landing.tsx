@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { GraduationCap, Briefcase, Users, TrendingUp, BookOpen } from "lucide-react";
+import mitAdtLogo from "@/assets/mit-adt-logo.png";
 
 const Landing = () => {
   return (
@@ -8,9 +9,9 @@ const Landing = () => {
       {/* Header */}
       <header className="border-b bg-card">
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-2">
-            <GraduationCap className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold text-foreground">InternConnect</span>
+          <div className="flex items-center gap-3">
+            <img src={mitAdtLogo} alt="MIT ADT University" className="h-12" />
+            <span className="text-2xl font-bold text-foreground">MIT ADT Internship Portal</span>
           </div>
           <nav className="flex gap-4">
             <Button variant="ghost" asChild>
@@ -32,10 +33,10 @@ const Landing = () => {
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 text-center">
         <h1 className="mb-6 text-5xl font-bold text-foreground">
-          Streamline Your Internship Journey
+          MIT ADT Internship Management
         </h1>
         <p className="mb-8 text-xl text-muted-foreground">
-          A comprehensive platform connecting students with internship opportunities
+          Connecting MIT ADT students with exceptional internship opportunities
         </p>
         <div className="flex justify-center gap-4">
           <Button size="lg" asChild>
@@ -85,7 +86,7 @@ const Landing = () => {
       {/* Footer */}
       <footer className="border-t bg-card py-8">
         <div className="container mx-auto px-4 text-center text-muted-foreground">
-          <p>&copy; 2024 InternConnect. All rights reserved.</p>
+          <p>&copy; 2024 MIT ADT Internship Portal. All rights reserved.</p>
         </div>
       </footer>
     </div>

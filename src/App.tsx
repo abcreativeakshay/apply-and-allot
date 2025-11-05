@@ -13,6 +13,8 @@ import StudentDashboard from "./pages/student/StudentDashboard";
 import CoordinatorLogin from "./pages/coordinator/CoordinatorLogin";
 import CoordinatorRegister from "./pages/coordinator/CoordinatorRegister";
 import CoordinatorDashboard from "./pages/coordinator/CoordinatorDashboard";
+import InternshipApplications from "./pages/coordinator/InternshipApplications";
+import EditInternship from "./pages/coordinator/EditInternship";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +34,8 @@ const App = () => (
           <Route path="/coordinator/login" element={<CoordinatorLogin />} />
           <Route path="/coordinator/register" element={<CoordinatorRegister />} />
           <Route path="/coordinator/dashboard" element={<CoordinatorDashboard />} />
+          <Route path="/coordinator/internship/:internshipId/applications" element={<InternshipApplications />} />
+          <Route path="/coordinator/internship/:internshipId/edit" element={<EditInternship />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

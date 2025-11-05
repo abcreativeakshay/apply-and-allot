@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Briefcase, LogOut, Users, FileText, Plus } from "lucide-react";
+import mitAdtLogo from "@/assets/mit-adt-logo.png";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -185,9 +186,9 @@ const CoordinatorDashboard = () => {
       {/* Header */}
       <header className="border-b bg-card">
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-2">
-            <Briefcase className="h-8 w-8 text-secondary" />
-            <span className="text-xl font-bold text-foreground">Coordinator Portal</span>
+          <div className="flex items-center gap-3">
+            <img src={mitAdtLogo} alt="MIT ADT University" className="h-12" />
+            <span className="text-xl font-bold text-foreground">MIT ADT Internship Portal</span>
           </div>
           <Button variant="ghost" onClick={handleLogout}>
             <LogOut className="mr-2 h-4 w-4" />
@@ -346,8 +347,9 @@ const CoordinatorDashboard = () => {
               </Badge>
             </div>
             <p className="mt-2 text-xs text-muted-foreground">
-              📚 Uses <strong>Queue data structure</strong> - Applications are processed in First In First Out order. 
-              Earlier applications are reviewed first, ensuring fairness.
+              📚 Uses <strong>Queue data structure (FIFO)</strong> - Time Complexity: O(1) for enqueue/dequeue operations. 
+              Applications are processed in First In First Out order ensuring fairness. This helps maintain chronological order 
+              and prevents newer applications from overtaking older ones.
             </p>
           </CardHeader>
           <CardContent>
@@ -370,10 +372,17 @@ const CoordinatorDashboard = () => {
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <Button size="sm" variant="outline">
-                        View Profile
+                      <Button 
+                        size="sm" 
+                        onClick={() => {
+                          const internship = myInternships.find(i => i.id === app.internshipId);
+                          if (internship) {
+                            navigate(`/coordinator/internship/${internship.id}/applications`);
+                          }
+                        }}
+                      >
+                        Review Application
                       </Button>
-                      <Button size="sm">Review</Button>
                     </div>
                   </div>
                 ))}
@@ -395,8 +404,9 @@ const CoordinatorDashboard = () => {
               </Badge>
             </div>
             <p className="mt-2 text-xs text-muted-foreground">
-              📚 Uses <strong>Tree structure</strong> for department hierarchy and <strong>Hashing</strong> 
-              for quick internship retrieval and status management.
+              📚 Uses <strong>Tree structure</strong> (O(log n) for hierarchical operations) for department categorization and 
+              <strong>HashMap</strong> (O(1) average lookup) for instant internship retrieval by ID. This combination enables 
+              fast searches and organized data management.
             </p>
           </CardHeader>
           <CardContent>
@@ -423,10 +433,18 @@ const CoordinatorDashboard = () => {
                     <span>Deadline: {internship.deadline}</span>
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline">
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => navigate(`/coordinator/internship/${internship.id}/applications`)}
+                    >
                       View Applications
                     </Button>
-                    <Button size="sm" variant="outline">
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => navigate(`/coordinator/internship/${internship.id}/edit`)}
+                    >
                       Edit
                     </Button>
                   </div>
