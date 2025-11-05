@@ -185,6 +185,77 @@ const FirebaseSetup = () => {
             </CardContent>
           </Card>
 
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                  5
+                </span>
+                Update Firestore Security Rules (Important!)
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3 mb-4">
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="mt-1 h-5 w-5 text-secondary" />
+                  <div>
+                    <p className="font-medium text-foreground">Go to Rules tab</p>
+                    <p className="text-sm text-muted-foreground">
+                      In Firestore Database, click on the "Rules" tab
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="mt-1 h-5 w-5 text-secondary" />
+                  <div>
+                    <p className="font-medium text-foreground">Copy and paste these rules</p>
+                    <p className="text-sm text-muted-foreground">
+                      Replace the existing rules with the ones below
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <Alert>
+                <AlertDescription>
+                  <pre className="text-xs overflow-x-auto bg-muted p-3 rounded">
+{`rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Students collection
+    match /students/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Coordinators collection
+    match /coordinators/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Internships - anyone can read, only coordinators can write their own
+    match /internships/{internshipId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null && 
+        resource.data.coordinatorId == request.auth.uid;
+    }
+    
+    // Applications - students can create/read their own, coordinators can read all
+    match /applications/{applicationId} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null;
+      allow update: if request.auth != null;
+    }
+  }
+}`}
+                  </pre>
+                </AlertDescription>
+              </Alert>
+              <p className="text-sm text-muted-foreground mt-3">
+                Click "Publish" to save the rules
+              </p>
+            </CardContent>
+          </Card>
+
           <Card className="bg-secondary text-secondary-foreground">
             <CardHeader>
               <CardTitle>All Set!</CardTitle>

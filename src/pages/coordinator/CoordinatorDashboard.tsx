@@ -122,7 +122,67 @@ const CoordinatorDashboard = () => {
       console.error("Error creating internship:", error);
       toast({
         title: "Error",
-        description: "Failed to create internship",
+        description: "Failed to create internship. Check Firebase setup and security rules.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const addSampleData = async () => {
+    if (!user) return;
+
+    const sampleInternships = [
+      {
+        title: "Software Engineer Intern",
+        company: "Google",
+        department: "CSE",
+        positions: 5,
+        deadline: "2024-12-31",
+        description: "Work on cutting-edge technologies and learn from experienced engineers.",
+        coordinatorId: user.uid,
+        status: "open",
+        createdAt: new Date().toISOString(),
+      },
+      {
+        title: "Data Analyst Intern",
+        company: "Microsoft",
+        department: "CSE",
+        positions: 3,
+        deadline: "2024-12-25",
+        description: "Analyze large datasets and provide actionable insights for product teams.",
+        coordinatorId: user.uid,
+        status: "open",
+        createdAt: new Date().toISOString(),
+      },
+      {
+        title: "Hardware Engineer Intern",
+        company: "Intel",
+        department: "ECE",
+        positions: 2,
+        deadline: "2024-12-20",
+        description: "Design and test next-generation processor architectures.",
+        coordinatorId: user.uid,
+        status: "open",
+        createdAt: new Date().toISOString(),
+      },
+    ];
+
+    try {
+      for (const internship of sampleInternships) {
+        await addDoc(collection(db, "internships"), internship);
+      }
+
+      toast({
+        title: "Sample Data Added",
+        description: "3 sample internships have been created successfully!",
+      });
+
+      loadData();
+    } catch (error) {
+      console.error("Error adding sample data:", error);
+      toast({
+        title: "Error",
+        description: "Failed to add sample data. Please check Firebase setup.",
         variant: "destructive",
       });
     }
@@ -151,13 +211,17 @@ const CoordinatorDashboard = () => {
             <h1 className="mb-2 text-3xl font-bold text-foreground">Coordinator Dashboard</h1>
             <p className="text-muted-foreground">Manage internships and applications</p>
           </div>
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="mr-2 h-4 w-4" />
-                Create Internship
-              </Button>
-            </DialogTrigger>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={addSampleData}>
+              Add Sample Data
+            </Button>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create Internship
+                </Button>
+              </DialogTrigger>
             <DialogContent className="max-w-2xl">
               <DialogHeader>
                 <DialogTitle>Create New Internship</DialogTitle>
@@ -241,6 +305,7 @@ const CoordinatorDashboard = () => {
               </form>
             </DialogContent>
           </Dialog>
+          </div>
         </div>
 
         {/* Stats */}
