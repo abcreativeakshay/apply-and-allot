@@ -72,14 +72,16 @@ const StudentRegister = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5 p-4">
+      <Card className="w-full max-w-md shadow-large animate-scale-in border-2">
+        <CardHeader className="text-center space-y-4">
+          <div className="mx-auto">
             <img src={mitLogo} alt="MIT University" className="h-20 mx-auto" />
           </div>
-          <CardTitle className="text-2xl">Student Registration</CardTitle>
-          <CardDescription>Create your account to get started</CardDescription>
+          <div>
+            <CardTitle className="text-3xl font-bold">Student Registration</CardTitle>
+            <CardDescription className="text-base mt-2">Create your account to get started</CardDescription>
+          </div>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

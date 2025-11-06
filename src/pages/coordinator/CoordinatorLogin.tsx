@@ -50,17 +50,21 @@ const CoordinatorLogin = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5 p-4">
+      <Card className="w-full max-w-md shadow-large animate-scale-in border-2">
+        <CardHeader className="text-center space-y-4">
+          <div className="mx-auto">
             <img src={mitLogo} alt="MIT University" className="h-20 mx-auto" />
           </div>
-          <CardTitle className="text-2xl">Coordinator Login</CardTitle>
-          <CardDescription>Access your coordinator dashboard</CardDescription>
-          <div className="mt-3 rounded-md bg-muted p-3 text-xs">
-            <p className="font-semibold text-foreground">🔐 DSA: Hashing</p>
-            <p className="mt-1 text-muted-foreground">
+          <div>
+            <CardTitle className="text-3xl font-bold">Coordinator Login</CardTitle>
+            <CardDescription className="text-base mt-2">Access your coordinator dashboard</CardDescription>
+          </div>
+          <div className="rounded-lg bg-secondary/5 border border-secondary/20 p-4 text-sm">
+            <p className="font-semibold text-foreground flex items-center gap-2">
+              <span className="text-lg">🔐</span> DSA: Hashing
+            </p>
+            <p className="mt-2 text-muted-foreground leading-relaxed">
               Passwords are secured using <strong>hash functions</strong> for safe storage and authentication
             </p>
           </div>
