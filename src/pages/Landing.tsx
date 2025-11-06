@@ -28,14 +28,6 @@ const Landing = () => {
                 <BookOpen className="inline h-4 w-4 mr-1" />
                 DSA Guide
               </Link>
-              <span className="text-white/40">|</span>
-              <a href="#" className="hover:opacity-80 transition-opacity">Careers</a>
-              <span className="text-white/40">|</span>
-              <a href="#" className="hover:opacity-80 transition-opacity">Alumni</a>
-              <span className="text-white/40">|</span>
-              <a href="#" className="hover:opacity-80 transition-opacity">Events</a>
-              <span className="text-white/40">|</span>
-              <a href="#" className="hover:opacity-80 transition-opacity">NAAC</a>
             </nav>
 
             {/* Action Buttons & Social */}
