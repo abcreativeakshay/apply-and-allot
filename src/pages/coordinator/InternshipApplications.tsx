@@ -15,6 +15,7 @@ const InternshipApplications = () => {
   const { user } = useAuth();
   const [internship, setInternship] = useState<any>(null);
   const [applications, setApplications] = useState<any[]>([]);
+  const [students, setStudents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -44,6 +45,10 @@ const InternshipApplications = () => {
         (app: any) => app.internshipId === internshipId
       );
       setApplications(internshipApplications);
+
+      // Load student data
+      const storedStudents = JSON.parse(localStorage.getItem('students') || '[]');
+      setStudents(storedStudents);
     } catch (error) {
       console.error("Error loading data:", error);
       toast({
@@ -119,13 +124,20 @@ const InternshipApplications = () => {
               <p className="text-center text-muted-foreground py-8">No applications yet</p>
             ) : (
               <div className="space-y-4">
-                {applications.map((app) => (
+                {applications.map((app) => {
+                  const student = students.find(s => s.uid === app.studentId);
+                  const studentName = student ? `${student.firstName} ${student.lastName}` : app.studentId;
+                  
+                  return (
                   <div key={app.id} className="flex items-center justify-between rounded-lg border p-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <User className="h-4 w-4 text-muted-foreground" />
-                        <h3 className="font-semibold text-card-foreground">{app.studentId}</h3>
+                        <h3 className="font-semibold text-card-foreground">{studentName}</h3>
                       </div>
+                      {student?.email && (
+                        <p className="text-sm text-muted-foreground">{student.email}</p>
+                      )}
                       <p className="text-sm text-muted-foreground">
                         Applied: {new Date(app.appliedOn).toLocaleDateString()}
                       </p>
@@ -157,7 +169,7 @@ const InternshipApplications = () => {
                       </div>
                     )}
                   </div>
-                ))}
+                )})}
               </div>
             )}
           </CardContent>
