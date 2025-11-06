@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { GraduationCap, Briefcase, Users, TrendingUp, BookOpen, Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import mitLogo from "@/assets/mit-university-logo.png";
+import heroBuilding from "@/assets/hero-building.jpeg";
 
 const Landing = () => {
   return (
@@ -84,8 +85,11 @@ const Landing = () => {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden min-h-[600px] flex items-center">
-        <div className="absolute inset-0 gradient-hero"></div>
-        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="absolute inset-0">
+          <img src={heroBuilding} alt="MIT-ADT University" className="w-full h-full object-cover" />
+        </div>
+        <div className="absolute inset-0 gradient-hero opacity-70"></div>
+        <div className="absolute inset-0 bg-black/30"></div>
         <div className="container mx-auto px-4 py-32 relative z-10">
           <div className="max-w-3xl animate-slide-up">
             <p className="text-white/90 text-2xl mb-4 font-light">The pursuit of</p>
