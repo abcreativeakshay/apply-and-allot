@@ -294,6 +294,104 @@ const Landing = () => {
         </div>
       </section>
 
+      {/* Partner Companies Section */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="text-center mb-16">
+          <h2 className="text-5xl font-bold text-foreground mb-4">Our Partner Companies</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Leading organizations trust us for their internship programs
+          </p>
+        </div>
+        <div className="grid gap-8 md:grid-cols-4">
+          <div className="group bg-card rounded-2xl p-8 text-center hover-lift shadow-medium border-2 border-transparent hover:border-primary transition-all">
+            <div className="w-20 h-20 rounded-full gradient-primary mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
+              TCS
+            </div>
+            <h3 className="text-lg font-bold text-foreground">Tata Consultancy Services</h3>
+          </div>
+          <div className="group bg-card rounded-2xl p-8 text-center hover-lift shadow-medium border-2 border-transparent hover:border-secondary transition-all">
+            <div className="w-20 h-20 rounded-full bg-secondary mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
+              INF
+            </div>
+            <h3 className="text-lg font-bold text-foreground">Infosys Technologies</h3>
+          </div>
+          <div className="group bg-card rounded-2xl p-8 text-center hover-lift shadow-medium border-2 border-transparent hover:border-primary transition-all">
+            <div className="w-20 h-20 rounded-full gradient-primary mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
+              WIP
+            </div>
+            <h3 className="text-lg font-bold text-foreground">Wipro Limited</h3>
+          </div>
+          <div className="group bg-card rounded-2xl p-8 text-center hover-lift shadow-medium border-2 border-transparent hover:border-secondary transition-all">
+            <div className="w-20 h-20 rounded-full bg-secondary mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
+              ACC
+            </div>
+            <h3 className="text-lg font-bold text-foreground">Accenture</h3>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="bg-muted/30 py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl font-bold text-foreground mb-4">Frequently Asked Questions</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Everything you need to know about the internship portal
+            </p>
+          </div>
+          <div className="max-w-3xl mx-auto space-y-6">
+            <div className="bg-card rounded-2xl p-8 shadow-medium">
+              <h3 className="text-lg font-bold text-foreground mb-3">How do I register on the portal?</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Click on the Register as Student button, fill in your academic details, upload required documents, and submit. You will receive a confirmation email once your registration is approved.
+              </p>
+            </div>
+            <div className="bg-card rounded-2xl p-8 shadow-medium">
+              <h3 className="text-lg font-bold text-foreground mb-3">Can I apply for multiple internships?</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Yes, you can apply for multiple internships. However, once you are allotted an internship and accept it, your other applications will be automatically withdrawn.
+              </p>
+            </div>
+            <div className="bg-card rounded-2xl p-8 shadow-medium">
+              <h3 className="text-lg font-bold text-foreground mb-3">How does the allotment process work?</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Our smart algorithm considers your academic performance, skills, preferences, and company requirements to ensure fair and optimal matching between students and internship opportunities.
+              </p>
+            </div>
+            <div className="bg-card rounded-2xl p-8 shadow-medium">
+              <h3 className="text-lg font-bold text-foreground mb-3">What documents do I need for registration?</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                You will need your latest academic transcripts, resume, a valid ID proof, and any relevant certificates or achievements that showcase your skills and qualifications.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA Section */}
+      <section className="gradient-header text-white py-20">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-5xl font-bold mb-4">Ready to Start Your Journey?</h2>
+          <p className="text-lg opacity-90 max-w-2xl mx-auto mb-10">
+            Join hundreds of students who have already found their dream internships through our platform
+          </p>
+          <div className="flex justify-center gap-4">
+            <Button size="lg" className="bg-white text-primary hover:bg-white/90 text-lg px-8 shadow-large" asChild>
+              <Link to="/student/register">
+                <GraduationCap className="mr-2 h-5 w-5" />
+                Get Started Now
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-primary text-lg px-8" asChild>
+              <Link to="/dsa-info">
+                <BookOpen className="mr-2 h-5 w-5" />
+                Learn More
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="gradient-header text-white py-12">
         <div className="container mx-auto px-4">
