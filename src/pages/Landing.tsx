@@ -69,16 +69,8 @@ const Landing = () => {
           </div>
 
           {/* Secondary Navigation */}
-          <nav className="flex items-center justify-between py-3 text-sm font-medium">
-            <div className="flex items-center gap-8">
-              <a href="#" className="hover:opacity-80 transition-opacity uppercase tracking-wide">Home</a>
-              <a href="#" className="hover:opacity-80 transition-opacity uppercase tracking-wide">About Us</a>
-              <a href="#" className="hover:opacity-80 transition-opacity uppercase tracking-wide">Academics</a>
-              <a href="#" className="hover:opacity-80 transition-opacity uppercase tracking-wide">Programs</a>
-              <a href="#" className="hover:opacity-80 transition-opacity uppercase tracking-wide">Admissions</a>
-              <a href="#" className="hover:opacity-80 transition-opacity uppercase tracking-wide">Research</a>
-              <a href="#" className="hover:opacity-80 transition-opacity uppercase tracking-wide">Placements</a>
-            </div>
+          <nav className="flex items-center justify-center py-3 text-sm font-medium">
+            <span className="uppercase tracking-wide text-lg font-bold">DSA End Sem Jury by Group 3</span>
           </nav>
         </div>
       </header>
