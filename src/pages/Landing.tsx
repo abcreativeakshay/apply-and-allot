@@ -33,10 +33,10 @@ const Landing = () => {
               </nav>
               
               <Button size="sm" variant="destructive" asChild className="hidden md:flex">
-                <Link to="/student/login">Login</Link>
+                <Link to="/student/login">Student Login</Link>
               </Button>
               <Button size="sm" className="bg-secondary hover:bg-secondary/90 hidden md:flex" asChild>
-                <Link to="/coordinator/login">Contact Us</Link>
+                <Link to="/coordinator/login">Coordinator Login</Link>
               </Button>
               
               {/* Social Icons */}
