@@ -171,6 +171,129 @@ const Landing = () => {
         </div>
       </section>
 
+      {/* Statistics Section */}
+      <section className="gradient-header text-white py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4">Our Impact</h2>
+            <p className="text-lg opacity-90">Making a difference in student careers</p>
+          </div>
+          <div className="grid gap-8 md:grid-cols-4">
+            <div className="text-center animate-fade-in">
+              <div className="text-6xl font-bold mb-2">500+</div>
+              <div className="text-xl opacity-90">Active Students</div>
+            </div>
+            <div className="text-center animate-fade-in">
+              <div className="text-6xl font-bold mb-2">200+</div>
+              <div className="text-xl opacity-90">Internship Opportunities</div>
+            </div>
+            <div className="text-center animate-fade-in">
+              <div className="text-6xl font-bold mb-2">95%</div>
+              <div className="text-xl opacity-90">Placement Success</div>
+            </div>
+            <div className="text-center animate-fade-in">
+              <div className="text-6xl font-bold mb-2">50+</div>
+              <div className="text-xl opacity-90">Partner Companies</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="text-center mb-16">
+          <h2 className="text-5xl font-bold text-foreground mb-4">How It Works</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Simple steps to kickstart your internship journey
+          </p>
+        </div>
+        <div className="grid gap-8 md:grid-cols-3">
+          <div className="text-center animate-scale-in">
+            <div className="w-20 h-20 rounded-full gradient-primary text-white flex items-center justify-center text-3xl font-bold mx-auto mb-6">
+              1
+            </div>
+            <h3 className="text-2xl font-bold mb-4 text-foreground">Register & Create Profile</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Sign up and build your comprehensive profile with academic details, skills, and preferences
+            </p>
+          </div>
+          <div className="text-center animate-scale-in">
+            <div className="w-20 h-20 rounded-full bg-secondary text-white flex items-center justify-center text-3xl font-bold mx-auto mb-6">
+              2
+            </div>
+            <h3 className="text-2xl font-bold mb-4 text-foreground">Browse & Apply</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Explore available internships and submit applications with a single click
+            </p>
+          </div>
+          <div className="text-center animate-scale-in">
+            <div className="w-20 h-20 rounded-full gradient-primary text-white flex items-center justify-center text-3xl font-bold mx-auto mb-6">
+              3
+            </div>
+            <h3 className="text-2xl font-bold mb-4 text-foreground">Get Selected & Start</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Receive allotment confirmation and begin your professional journey
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="bg-muted/30 py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl font-bold text-foreground mb-4">Student Success Stories</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Hear from students who found their dream internships
+            </p>
+          </div>
+          <div className="grid gap-8 md:grid-cols-3">
+            <div className="bg-card rounded-2xl p-8 shadow-medium hover:shadow-large transition-all">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 rounded-full gradient-primary flex items-center justify-center text-white text-2xl font-bold">
+                  A
+                </div>
+                <div>
+                  <h4 className="font-bold text-lg">Ananya Sharma</h4>
+                  <p className="text-sm text-muted-foreground">Computer Science</p>
+                </div>
+              </div>
+              <p className="text-muted-foreground leading-relaxed italic">
+                "The portal made finding and applying for internships so easy. I secured my dream internship at a top tech company within weeks!"
+              </p>
+            </div>
+            <div className="bg-card rounded-2xl p-8 shadow-medium hover:shadow-large transition-all">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 rounded-full bg-secondary flex items-center justify-center text-white text-2xl font-bold">
+                  R
+                </div>
+                <div>
+                  <h4 className="font-bold text-lg">Rohan Patil</h4>
+                  <p className="text-sm text-muted-foreground">Mechanical Engineering</p>
+                </div>
+              </div>
+              <p className="text-muted-foreground leading-relaxed italic">
+                "Excellent platform with diverse opportunities. The smart allotment system ensured I got matched with the perfect internship role."
+              </p>
+            </div>
+            <div className="bg-card rounded-2xl p-8 shadow-medium hover:shadow-large transition-all">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 rounded-full gradient-primary flex items-center justify-center text-white text-2xl font-bold">
+                  P
+                </div>
+                <div>
+                  <h4 className="font-bold text-lg">Priya Deshmukh</h4>
+                  <p className="text-sm text-muted-foreground">Electronics</p>
+                </div>
+              </div>
+              <p className="text-muted-foreground leading-relaxed italic">
+                "The real-time tracking and transparent process gave me confidence throughout my application journey. Highly recommended!"
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="gradient-header text-white py-12">
         <div className="container mx-auto px-4">
