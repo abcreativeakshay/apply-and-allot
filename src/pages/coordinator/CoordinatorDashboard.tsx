@@ -366,7 +366,7 @@ const CoordinatorDashboard = () => {
               <div className="space-y-4">
                 {pendingApplications.map((app) => {
                   const student = students.find(s => s.uid === app.studentId);
-                  const studentName = student ? `${student.firstName} ${student.lastName}` : app.studentId;
+                  const studentName = student?.name || app.studentId;
                   
                   return (
                   <div key={app.id} className="flex items-center justify-between rounded-lg border p-4">
