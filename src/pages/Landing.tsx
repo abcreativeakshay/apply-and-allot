@@ -61,8 +61,14 @@ const Landing = () => {
           </div>
 
           {/* Secondary Navigation */}
-          <nav className="flex items-center justify-center py-3 text-sm font-medium">
-            <span className="uppercase tracking-wide text-lg font-bold">DSA End Sem Jury by Group 3</span>
+          <nav className="flex items-center justify-start py-3 text-sm font-medium">
+            <div className="flex items-center gap-4">
+              <span className="uppercase tracking-wide text-lg font-bold">DSA End Sem Jury by Group 3</span>
+              <span className="text-white/40">|</span>
+              <span className="text-sm font-normal opacity-90">Internship Management Portal</span>
+              <span className="text-white/40">|</span>
+              <span className="text-sm font-normal opacity-90">Academic Year 2024-25</span>
+            </div>
           </nav>
         </div>
       </header>
