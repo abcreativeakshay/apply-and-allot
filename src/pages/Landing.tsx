@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { GraduationCap, Briefcase, Users, TrendingUp, BookOpen, Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import mitLogo from "@/assets/mit-university-logo.png";
-import heroBuilding from "@/assets/hero-building.jpeg";
+import heroBuilding from "@/assets/mit-campus.png";
 
 const Landing = () => {
   return (
