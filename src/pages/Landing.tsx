@@ -22,16 +22,16 @@ const Landing = () => {
               </div>
             </div>
             
-            {/* Top Navigation */}
-            <nav className="hidden lg:flex items-center gap-4 text-sm animate-fade-in">
-              <Link to="/dsa-info" className="hover:opacity-80 transition-opacity">
-                <BookOpen className="inline h-4 w-4 mr-1" />
-                DSA Guide
-              </Link>
-            </nav>
-
             {/* Action Buttons & Social */}
             <div className="flex items-center gap-3 animate-fade-in">
+              {/* Top Navigation */}
+              <nav className="hidden lg:flex items-center gap-4 text-sm mr-6">
+                <Link to="/dsa-info" className="hover:opacity-80 transition-opacity">
+                  <BookOpen className="inline h-4 w-4 mr-1" />
+                  DSA Guide
+                </Link>
+              </nav>
+              
               <Button size="sm" variant="destructive" asChild className="hidden md:flex">
                 <Link to="/student/login">Login</Link>
               </Button>
