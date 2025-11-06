@@ -76,8 +76,8 @@ const Landing = () => {
         <div className="absolute inset-0 bg-black/30"></div>
         <div className="container mx-auto px-4 py-32 relative z-10">
           <div className="max-w-3xl animate-slide-up">
-            <p className="text-white/90 text-2xl mb-4 font-light">The pursuit of</p>
-            <h1 className="mb-8 text-7xl font-bold text-white leading-tight drop-shadow-lg">
+            <p className="text-white/90 text-4xl mb-4 font-light">The pursuit of</p>
+            <h1 className="mb-8 text-8xl font-bold text-white leading-tight drop-shadow-lg">
               Excellence Begins here...
             </h1>
             <Button size="lg" className="bg-primary hover:bg-primary/90 text-white text-base px-8 rounded-full shadow-large" asChild>
