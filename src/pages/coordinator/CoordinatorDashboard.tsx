@@ -21,6 +21,7 @@ const CoordinatorDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [myInternships, setMyInternships] = useState<any[]>([]);
   const [pendingApplications, setPendingApplications] = useState<any[]>([]);
+  const [students, setStudents] = useState<any[]>([]);
   const [newInternship, setNewInternship] = useState({
     title: "",
     company: "",
@@ -56,6 +57,10 @@ const CoordinatorDashboard = () => {
         (app: any) => myInternshipIds.includes(app.internshipId) && app.status === "pending"
       );
       setPendingApplications(pending);
+
+      // Load student data
+      const storedStudents = JSON.parse(localStorage.getItem('students') || '[]');
+      setStudents(storedStudents);
     } catch (error) {
       console.error("Error loading data:", error);
       toast({
@@ -359,10 +364,14 @@ const CoordinatorDashboard = () => {
               <p className="text-center text-muted-foreground">No pending applications</p>
             ) : (
               <div className="space-y-4">
-                {pendingApplications.map((app) => (
+                {pendingApplications.map((app) => {
+                  const student = students.find(s => s.uid === app.studentId);
+                  const studentName = student ? `${student.firstName} ${student.lastName}` : app.studentId;
+                  
+                  return (
                   <div key={app.id} className="flex items-center justify-between rounded-lg border p-4">
                     <div>
-                      <h3 className="font-semibold text-card-foreground">{app.studentId}</h3>
+                      <h3 className="font-semibold text-card-foreground">{studentName}</h3>
                       <p className="text-sm text-muted-foreground">{app.title}</p>
                       <div className="mt-1 flex gap-2">
                         <Badge variant="outline">{app.company}</Badge>
@@ -385,7 +394,7 @@ const CoordinatorDashboard = () => {
                       </Button>
                     </div>
                   </div>
-                ))}
+                )})}
               </div>
             )}
           </CardContent>
